@@ -6,13 +6,13 @@ tweets = list()
 stopwords = set(STOPWORDS)
 stopwords.update(['RT','co','https','http','Baroda','Vadodara','SmartCitiesIndia'])
 
-with open('Reading_TweetList.txt') as f:
+with open('VandB_TweetList.txt') as f:
     reader = csv.reader(f)
     for id,time,text in reader:
         tweets.append(text)
 
 wc = WordCloud(width = 800, height = 400,stopwords = stopwords)
-wc.generate(" ".join(Tweets_dict.values()))
+wc.generate(" ".join(tweets))
 plot.imshow(wc)
 plot.axis("off")
 plot.rcParams["figure.figsize"] = (20,10)
