@@ -5,7 +5,7 @@ import csv
 tweets = list()
 stopwords = set(STOPWORDS)
 stopwords.update(['RT','co','https','http','rdguk'])
-with open('some.csv') as f:
+with open('Reading_TweetList.txt') as f:
     reader = csv.reader(f)
     for id,time,text in reader:
         tweets.append(text)
