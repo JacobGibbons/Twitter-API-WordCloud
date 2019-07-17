@@ -1,9 +1,11 @@
 import tweepy as tw
-import json
 import re
 import time
 from Keys import *
 import datetime
+import os.path
+import csv
+
 
 
 search_words = ['#rdguk','#Reading2050']
@@ -13,30 +15,46 @@ search_terms = ['Traffic','Transport','Mobility','Bicycle','Congestion',
 'Pavement','Pedestrian','Electric','\"Traffic lights\"','Motorway']
 
 file = 'Reading_TweetList.txt'
-Tweets_dict = dict()
 auth = tw.OAuthHandler(Key, Secret)
 api = tw.API(auth)
 terms_grouped = []
 
+
+f = open(file, 'a').close()
+tweet_ids = set()
+
+with open(file) as csvfile:
+     reader = csv.reader(csvfile)
+     for id,_,_ in reader:
+         tweet_ids.add(id)
+
+f = open(file, 'a')
+c = csv.writer(f, quoting=csv.QUOTE_ALL)
+
 while True:
-    with open(file,"r") as f:
-        Tweets_dict = json.load(f)
 
     for i in range(0,len(search_terms),4):
         group = search_terms[i:i+4]
         query_string = " OR ".join(search_words)+" "+" OR ".join(group)+' -filter:retweets'
+
         try:
             tweets = tw.Cursor(api.search, q=query_string, lang='en').items(50)
 
             for tweet in tweets:
+                if tweet.id in tweet_ids:
+                    continue
+                posttime = tweet.created_at
+
                 text = re.sub(r'https:\/\/t.co\S{1,11}', '', tweet.text, flags=re.MULTILINE)
-                Tweets_dict[tweet.id] = text
+                #Tweets_dict[tweet.id] = (text,str(posttime))
                 print(text)
+
+                c.writerow([str(tweet.id), str(posttime),text.replace("\n", " ")])
+                f.flush()
 
         except tw.TweepError:
             print("Error : too many requests")
-        time.sleep(40)
-    time.sleep(30)
 
-    with open(file,"w") as f:
-        f.write(json.dumps(Tweets_dict,ensure_ascii=False))
+
+        time.sleep(10)
+f.close()
