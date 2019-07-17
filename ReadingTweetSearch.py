@@ -43,10 +43,10 @@ while True:
             for tweet in tweets:
                 if tweet.id in tweet_ids:
                     continue
+                tweet_ids.add(tweet.id)
                 posttime = tweet.created_at
 
                 text = re.sub(r'https:\/\/t.co\S{1,11}', '', tweet.text, flags=re.MULTILINE)
-                #Tweets_dict[tweet.id] = (text,str(posttime))
                 print(text)
 
                 c.writerow([str(tweet.id), str(posttime),text.replace("\n", " ")])
@@ -54,7 +54,6 @@ while True:
 
         except tw.TweepError:
             print("Error : too many requests")
-
-
         time.sleep(10)
+
 f.close()
