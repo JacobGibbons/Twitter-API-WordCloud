@@ -3,6 +3,8 @@ import json
 import re
 import time
 from Keys import *
+import datetime
+
 
 search_words = ['#rdguk','#Reading2050']
 search_terms = ['Traffic','Transport','Mobility','Bicycle','Congestion',
@@ -10,6 +12,7 @@ search_terms = ['Traffic','Transport','Mobility','Bicycle','Congestion',
 'Roads','\"Electric Vehicles\"','Bus','\"Smart Cities\"','Car','Road','Walk',
 'Pavement','Pedestrian','Electric','\"Traffic lights\"','Motorway']
 
+file = 'Reading_TweetList.txt'
 Tweets_dict = dict()
 auth = tw.OAuthHandler(Key, Secret)
 api = tw.API(auth)
