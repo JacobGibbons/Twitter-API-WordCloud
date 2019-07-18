@@ -1,8 +1,11 @@
 # Twitter Wordcloud
 
-This project consists of multiple programs. The first is necessary in order to use the others, it continuously searches Twitter for tweets based on search terms provided and stores the found tweets in a csv format file. Search terms can be hashtags or specific words, the example files are called 'Reading_TweetList.txt' and 'VandB_TweetList.txt'. The other programs then display this information in a multitude of ways;
+This project consists of multiple programs. The first is necessary in order to use the others, it continuously searches Twitter for tweets based on search terms provided and stores the found tweets in a csv format file. Search terms can be hashtags or specific words, the example files are called 'Reading_TweetList.txt' and 'VandB_TweetList.txt'. The other programs then display this information in a multitude of ways:
+
 A wordcloud
+
 A frequency time graph
+
 A sentiment pie chart
 
 ### Prerequisites
