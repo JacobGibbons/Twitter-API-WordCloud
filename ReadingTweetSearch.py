@@ -38,7 +38,7 @@ while True:
         query_string = " OR ".join(search_words)+" "+" OR ".join(group)+' -filter:retweets'
 
         try:
-            tweets = tw.Cursor(api.search, q=query_string, lang='en').items(50)
+            tweets = tw.Cursor(api.search, q=query_string, count=100, lang='en').items(100)
 
             for tweet in tweets:
                 if tweet.id in tweet_ids:
@@ -53,7 +53,8 @@ while True:
                 f.flush()
 
         except tw.TweepError:
-            print("Error : too many requests")
+            print("Error: too many requests")
+            time.sleep(300)
         time.sleep(10)
 
 f.close()
