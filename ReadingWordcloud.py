@@ -3,23 +3,16 @@ import matplotlib.pyplot as plot
 import csv
 from textblob import TextBlob
 
-ptweets = list()
-ntweets = list()
-tweets = list()
+tweets = list[]
 text_time = []
 stopwords = set(STOPWORDS)
 stopwords.update(['RT','co','https','http','rdguk'])
 with open('Reading_TweetList.txt') as f:
     reader = csv.reader(f)
     for id,time,text in reader:
-        tweets.append(text)
         text_time.append([text,time])
         analysis = TextBlob(text)
-        if analysis.sentiment.polarity > 0:
-            ptweets.append(text)
-        elif analysis.sentiment.polarity < 0:
-            ntweets.append(text)
-
+        tweets.append((text,analysis.sentiment.polarity))
 
 
 def FrequencyTimeGraph(word):
