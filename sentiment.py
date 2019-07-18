@@ -37,8 +37,7 @@ class Sentiment():
         plot.show()
 
     def show_hist(self):
-        scores = np.array([x[0] for x in self.tweets])
-        #fig, ax = plot.subplots(figsize=(7, 4))
+        scores = np.array([x[1] for x in self.tweets])
         mu = np.mean(scores)
         sigma = np.std(scores)
         n,bins,_ = plot.hist(scores, 14, density=True, histtype='step',
