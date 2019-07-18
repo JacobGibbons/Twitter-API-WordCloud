@@ -22,8 +22,7 @@ def FrequencyTimeGraph(word):
     plot.plot(Yaxis,Frequencytable,'ro')
     plot.ylabel('Frequency')
     plot.xlabel('Time')
-    plot.title('Frequency of \''+word+'\' in relation to time of day posted')
-    #plot.rcParams.update({'font.size': 22})
+    plot.title('Frequency of tweets that contain \''+word+'\' in relation to time of day posted')
     plot.xticks(range(24))
     plot.show()
 
