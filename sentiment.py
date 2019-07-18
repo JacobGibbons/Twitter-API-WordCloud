@@ -48,31 +48,35 @@ class Sentiment():
         plot.show()
 
     def show_worldcloud(self,stopwords):
-
         stopwords = set(STOPWORDS) | set(stopwords)
-
-        wc = WordCloud(width = 799, height = 400,stopwords = stopwords)
-        wc.generate(" ".join(x[0] for x in self.tweets))
+        wc = WordCloud(width = 799, height = 400,stopwords = stopwords,collocations=False)
+        a = " ".join(x[0] for x in self.tweets)
+        self.words = wc.process_text(a)
+        wc.generate_from_frequencies(self.words)
         plot.imshow(wc)
         plot.axis("off")
         plot.rcParams["figure.figsize"] = (19,10)
         plot.show()
 
-    def FrequencyTimeGraph(word):
+    def FrequencyTimeGraph(self,word):
+        word = word.lower()
         text_time = self.text_time
         Frequencytable = []
         Yaxis = []
-        for i in range(23):
-            Frequencytable.append(-1)
+        for i in range(24):
+            Frequencytable.append(0)
             Yaxis.append(i)
+        for tweet in text_time:
+            if word in tweet[0].lower():
+                Frequencytable[int(tweet[1].split(" ")[1].split(":")[0])]+=1
 
-        for idx,tweet in enumerate(text_time):
-            if word in tweet[-1]:
-                Frequencytable[int(text_time[idx][0].split(" ")[1].split(":")[0])]+=1
+
+        plot.figure(figsize=(10,5))
         plot.plot(Yaxis,Frequencytable,'k')
         plot.plot(Yaxis,Frequencytable,'ro')
         plot.ylabel('Frequency')
         plot.xlabel('Time')
+        plot.title('Frequency of \''+word+'\' in relation to time of day posted')
+        #plot.rcParams.update({'font.size': 22})
+        plot.xticks(range(24))
         plot.show()
-
-       #plot.show()

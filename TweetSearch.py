@@ -24,7 +24,6 @@ class TweetSearch():
         c = csv.writer(f, quoting=csv.QUOTE_ALL)
 
         while True:
-
             for i in range(0,len(search_terms),4):
                 group = search_terms[i:i+4]
                 query_string = " OR ".join(search_words)+" "+" OR ".join(group)+' -filter:retweets'
@@ -53,5 +52,4 @@ class TweetSearch():
                     print("Error: too many requests")
                     time.sleep(300)
                 time.sleep(10)
-
         f.close()
