@@ -3,7 +3,11 @@ import matplotlib.pyplot as plot
 import csv
 from textblob import TextBlob
 
-tweets = list[]
+tweets = []
+positiveproportion = 0
+negativeproportion = 0
+neutralproportion = 0
+
 text_time = []
 stopwords = set(STOPWORDS)
 stopwords.update(['RT','co','https','http','rdguk'])
@@ -12,7 +16,17 @@ with open('Reading_TweetList.txt') as f:
     for id,time,text in reader:
         text_time.append([text,time])
         analysis = TextBlob(text)
-        tweets.append((text,analysis.sentiment.polarity))
+        score = analysis.sentiment.polarity
+        tweets.append((text, score))
+        if score > 0:
+            positiveproportion+=1
+        elif score < 0:
+            negativeproportion+=1
+
+positiveproportion /= len(tweets)
+negativeproportion /= len(tweets)
+neutralproportion = 1 - positiveproportion - negativeproportion
+sentimentfractions = [positiveproportion,negativeproportion,neutralproportion]
 
 
 def FrequencyTimeGraph(word):
@@ -30,10 +44,7 @@ def FrequencyTimeGraph(word):
     plot.ylabel('Frequency')
     plot.xlabel('Time')
     plot.show()
-positiveproportion = len(ptweets)/len(tweets)
-negativeproportion = len(ntweets)/len(tweets)
-neutralproportion = 1-positiveproportion-negativeproportion
-sentimentfractions = [positiveproportion,negativeproportion,neutralproportion]
+
 pielabels = ['Positive','Negative','Neutral']
 plot.pie(sentimentfractions, labels=pielabels, autopct='%.0f%%')
 plot.show()
