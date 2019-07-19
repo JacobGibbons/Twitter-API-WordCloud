@@ -9,6 +9,8 @@ class Sentiment():
     def __init__(self,filename):
         text_time = []
         tweets = []
+        #ptweets = []
+        #ntweets = []
         positiveproportion = 0
         negativeproportion = 0
         neutralproportion = 0
@@ -21,8 +23,10 @@ class Sentiment():
                 tweets.append((text, score))
                 if score > 0:
                     positiveproportion+=1
+                    #ptweets.append([text,score])
                 elif score < 0:
                     negativeproportion+=1
+                    #ntweets.append([text,score])
 
         positiveproportion /= len(tweets)
         negativeproportion /= len(tweets)
@@ -30,11 +34,20 @@ class Sentiment():
         self.sentimentfractions = [positiveproportion,negativeproportion,neutralproportion]
         self.text_time = text_time
         self.tweets = tweets
-
+        self.positivesorted = tweets.sort(key = sortSecond)
+        self.negativesorted = tweets.sort(key = sortSecond, reverse = True)
     def show_piechart(self):
         pielabels = ['Positive','Negative','Neutral']
         plot.pie(self.sentimentfractions, labels=pielabels, autopct='%.0f%%')
         plot.show()
+
+    def print_sentiment_extremes(self,NoTweets = 5,negative = False):
+        if negative:
+            print(self.negativesorted[:NoTweets])
+        else:
+            print(self.positivesorted[:NoTweets])
+
+
 
     def show_hist(self):
         scores = np.array([x[1] for x in self.tweets])
