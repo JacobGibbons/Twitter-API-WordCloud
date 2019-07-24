@@ -7,7 +7,6 @@ from tweet import Tweet
 
 class DataAnalysis():
     def __init__(self,filename):
-        text_time = []
         tweets = []
         positiveproportion = 0
         negativeproportion = 0
@@ -16,7 +15,6 @@ class DataAnalysis():
             reader = csv.reader(f)
             for row in reader:
                 tweet = Tweet(row)
-                text_time.append([tweet.text,tweet.time])
                 tweets.append(tweet)
                 if tweet.sentiment > 0:
                     positiveproportion+=1
@@ -27,7 +25,6 @@ class DataAnalysis():
         negativeproportion /= len(tweets)
         neutralproportion = 1 - positiveproportion - negativeproportion
         self.sentimentfractions = [positiveproportion,negativeproportion,neutralproportion]
-        self.text_time = text_time
         self.tweets = tweets
         self.positivesorted = sorted(tweets, key=lambda i:i.sentiment, reverse = True)
         self.negativesorted = sorted(tweets, key=lambda i:i.sentiment)
@@ -68,16 +65,14 @@ class DataAnalysis():
 
     def FrequencyTimeGraph(self,word):
         word = word.lower()
-        text_time = self.text_time
         Frequencytable = []
         Yaxis = []
         for i in range(24):
             Frequencytable.append(0)
             Yaxis.append(i)
-        for tweet in text_time:
-            if word in tweet[0].lower():
-                Frequencytable[int(tweet[1].split(" ")[1].split(":")[0])]+=1
-
+        for tweet in self.tweets:
+            if tweet.contains(word):
+                Frequencytable[tweet.get_hour()]+=1
         plot.figure(figsize=(10,5))
         plot.plot(Yaxis,Frequencytable,'k')
         plot.plot(Yaxis,Frequencytable,'ro')
