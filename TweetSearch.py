@@ -5,6 +5,7 @@ from Keys import *
 import datetime
 import os.path
 import csv
+from random import random
 
 
 class TweetSearch():
@@ -53,6 +54,6 @@ class TweetSearch():
 
                 except tw.TweepError:
                     print("Error: too many requests")
-                    time.sleep(300)
+                    time.sleep(180 + int(60*4*random()))
                 time.sleep(10)
         f.close()
