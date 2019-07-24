@@ -1,8 +1,8 @@
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plot
 import csv
-from textblob import TextBlob
 import numpy as np
+from tweet import Tweet
 
 
 class DataAnalysis():
@@ -14,14 +14,13 @@ class DataAnalysis():
         neutralproportion = 0
         with open(filename) as f:
             reader = csv.reader(f)
-            for id,time,text in reader:
-                text_time.append([text,time])
-                analysis = TextBlob(text)
-                score = analysis.sentiment.polarity
-                tweets.append((text, score))
-                if score > 0:
+            for row in reader:
+                tweet = Tweet(row)
+                text_time.append([tweet.text,tweet.time])
+                tweets.append(tweet)
+                if tweet.sentiment > 0:
                     positiveproportion+=1
-                elif score < 0:
+                elif tweet.sentiment < 0:
                     negativeproportion+=1
 
         positiveproportion /= len(tweets)
@@ -30,8 +29,8 @@ class DataAnalysis():
         self.sentimentfractions = [positiveproportion,negativeproportion,neutralproportion]
         self.text_time = text_time
         self.tweets = tweets
-        self.positivesorted = sorted(tweets, key=lambda i: i[1], reverse = True)
-        self.negativesorted = sorted(tweets, key=lambda i: i[1])
+        self.positivesorted = sorted(tweets, key=lambda i:i.sentiment, reverse = True)
+        self.negativesorted = sorted(tweets, key=lambda i:i.sentiment)
 
     def show_piechart(self):
         pielabels = ['Positive','Negative','Neutral']
@@ -41,13 +40,13 @@ class DataAnalysis():
     def print_sentiment_extremes(self,NoTweets = 5,negative = False):
         if negative:
             for i in range(NoTweets):
-                print(self.negativesorted[i][0],self.negativesorted[i][1])
+                print(self.negativesorted[i].text,self.negativesorted[i].sentiment)
         else:
             for i in range(NoTweets):
-                print(self.positivesorted[i][0],self.positivesorted[i][1])
+                print(self.positivesorted[i].text,self.positivesorted[i].sentiment)
 
     def show_hist(self):
-        scores = np.array([x[1] for x in self.tweets])
+        scores = np.array([x.sentiment for x in self.tweets])
         mu = np.mean(scores)
         sigma = np.std(scores)
         n,bins,_ = plot.hist(scores, 14, density=True, histtype='step',
@@ -59,7 +58,7 @@ class DataAnalysis():
     def show_worldcloud(self,stopwords):
         stopwords = set(STOPWORDS) | set(stopwords)
         wc = WordCloud(width = 800, height = 400,stopwords = stopwords,collocations=False)
-        a = " ".join(x[0] for x in self.tweets)
+        a = " ".join(x.text for x in self.tweets)
         self.words = wc.process_text(a)
         wc.generate_from_frequencies(self.words)
         plot.imshow(wc)
@@ -87,3 +86,7 @@ class DataAnalysis():
         plot.title('Frequency of \''+word+'\' in relation to time of day posted')
         plot.xticks(range(24))
         plot.show()
+
+    def tweets_with_word(self,word):
+        return [x.text for x in self.tweets if x.contains(word)]
+

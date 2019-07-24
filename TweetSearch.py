@@ -44,7 +44,7 @@ class TweetSearch():
 
                         #text = re.sub(r'https:\/\/t.co\S{1,11}', '', text, flags=re.MULTILINE)
                         print(text)
-
+                        print(tweet.geo)
 
                         c.writerow([str(tweet.id), str(posttime),text.replace("\n", " "), \
                                 tweet.user.name, tweet.user.verified, tweet.user.followers_count,\
