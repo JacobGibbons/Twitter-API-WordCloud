@@ -17,8 +17,8 @@ class TweetSearch():
 
         with open(filename) as csvfilename:
              reader = csv.reader(csvfilename)
-             for id,_,_ in reader:
-                 tweet_ids.add(id)
+             for row in reader:
+                 tweet_ids.add(row[0])
 
         f = open(filename, 'a')
         c = csv.writer(f, quoting=csv.QUOTE_ALL)
@@ -42,10 +42,13 @@ class TweetSearch():
                         else:
                            text=tweet.full_text
 
-                        text = re.sub(r'https:\/\/t.co\S{1,11}', '', text, flags=re.MULTILINE)
+                        #text = re.sub(r'https:\/\/t.co\S{1,11}', '', text, flags=re.MULTILINE)
                         print(text)
 
-                        c.writerow([str(tweet.id), str(posttime),text.replace("\n", " ")])
+
+                        c.writerow([str(tweet.id), str(posttime),text.replace("\n", " "), \
+                                tweet.user.name, tweet.user.verified, tweet.user.followers_count,\
+                                tweet.user.created_at])
                         f.flush()
 
                 except tw.TweepError:
